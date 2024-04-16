@@ -21,4 +21,4 @@ struct frame {
  * continuously calls `callback`, blocking until the callback returns `false`.
  */
 void window_display(const char* title, size_t width, size_t height,
-    bool callback(const struct frame*));
+    bool callback(const struct frame*, void*), void* user_data);

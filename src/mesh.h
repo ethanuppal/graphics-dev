@@ -6,12 +6,7 @@
 #pragma once
 
 #include <stdio.h>
-
-struct vector {
-    double x;
-    double y;
-    double z;
-};
+#include "vector.h"
 
 struct face {
     size_t v1;

@@ -8,7 +8,7 @@
 #include <SDL.h>
 
 void window_display(const char* title, size_t width, size_t height,
-    bool callback(const struct frame*)) {
+    bool callback(const struct frame*, void*), void* user_data) {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         exit(1);
     }
@@ -51,7 +51,7 @@ void window_display(const char* title, size_t width, size_t height,
             }
         }
         if (!quit) {
-            quit = !callback(&frame);
+            quit = !callback(&frame, user_data);
             SDL_UpdateTexture(frame_texture, NULL, pixels,
                 width * sizeof(*pixels));
             SDL_RenderClear(renderer);
