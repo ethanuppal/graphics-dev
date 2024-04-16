@@ -22,8 +22,9 @@
 void test_assert_equal(bool result, const char* exp, const char* act,
     const char* func, int line) {
     if (!result) {
-        fprintf(stderr, "%s: assert_equal failed line %d: %s != %s\n", func,
-            line, exp, act);
+        fprintf(stderr,
+            "%s: assert_equal failed line %d: %s is not equal to %s\n", func,
+            line, act, exp);
         exit(1);
     }
 }
@@ -51,14 +52,14 @@ void test_load_mesh(void) {
     assert_equal(0.0, v1.z);
 
     struct vector v2 = mesh_get_vertex(mesh, 1);
-    assert_equal(1.0, v1.x);
-    assert_equal(1.0, v1.y);
-    assert_equal(0.0, v1.z);
+    assert_equal(1.0, v2.x);
+    assert_equal(1.0, v2.y);
+    assert_equal(0.0, v2.z);
 
     struct vector v3 = mesh_get_vertex(mesh, 2);
-    assert_equal(2.0, v1.x);
-    assert_equal(0.0, v1.y);
-    assert_equal(0.0, v1.z);
+    assert_equal(2.0, v3.x);
+    assert_equal(0.0, v3.y);
+    assert_equal(0.0, v3.z);
 
     struct face face = mesh_get_face(mesh, 0);
     assert_equal(0, face.v1);

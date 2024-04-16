@@ -39,10 +39,10 @@ struct mesh* mesh_load(FILE* file) {
 
     for (size_t i = 0; i < n_vertices; i++) {
         struct vector vertex;
-        if (fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z) < 3) {
+        if (fscanf(file, "%lf %lf %lf\n", &vertex.x, &vertex.y, &vertex.z)
+            < 3) {
             exit(1);
         }
-        printf("%f %f %f\n", vertex.x, vertex.y, vertex.z);
         mesh->vertices[i] = vertex;
     }
 
