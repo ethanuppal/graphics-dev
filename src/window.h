@@ -3,6 +3,8 @@
  * @copyright Copyright (C) 2024 Ethan Uppal. All rights reserved.
  */
 
+#pragma once
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>

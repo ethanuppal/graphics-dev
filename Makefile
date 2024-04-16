@@ -12,11 +12,18 @@ TARGET		:= main
 # CFLAGS 		+= $(CRELEASE)
 CFLAGS 		+= $(CDEBUG) $(shell sdl2-config --cflags --libs)
 
-SRC			:= main.c $(shell find $(SRCDIR) -name "*.c" -type f)
+SRC			:= $(shell find $(SRCDIR) -name "*.c" -type f)
 OBJ			:= $(SRC:.c=.o)
 
-$(TARGET): $(OBJ)
+$(TARGET): main.c $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
+
+.PHONY: test
+test: test.c $(OBJ)
+	@$(CC) $(CFLAGS) -DTEST -o _temp $^
+	@echo 'Running tests...'
+	@./_temp
+	@rm -f ./_temp
 
 %.o: %.c
 	@echo 'Compiling $@'
