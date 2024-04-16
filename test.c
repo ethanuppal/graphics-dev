@@ -66,6 +66,14 @@ void test_load_mesh(void) {
     assert_equal(0, face.v2);
     assert_equal(0, face.v2);
 
+    const struct aabb* aabb = mesh_get_aabb(mesh);
+    assert_equal(0, aabb->min.x);
+    assert_equal(0, aabb->min.y);
+    assert_equal(0, aabb->min.z);
+    assert_equal(2, aabb->max.x);
+    assert_equal(1, aabb->max.y);
+    assert_equal(0, aabb->max.z);
+
     mesh_destroy(mesh);
 }
 

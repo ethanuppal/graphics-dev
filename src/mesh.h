@@ -19,6 +19,11 @@ struct face {
     size_t v3;
 };
 
+struct aabb {
+    struct vector min;
+    struct vector max;
+};
+
 struct mesh;
 
 struct mesh* mesh_load(FILE* file);
@@ -29,3 +34,4 @@ size_t mesh_n_vertices(const struct mesh* mesh);
 size_t mesh_n_faces(const struct mesh* mesh);
 struct vector mesh_get_vertex(const struct mesh* mesh, size_t i);
 struct face mesh_get_face(const struct mesh* mesh, size_t i);
+const struct aabb* mesh_get_aabb(const struct mesh* mesh);

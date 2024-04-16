@@ -5,12 +5,14 @@
 
 #include "mesh.h"
 #include <stdlib.h>
+#include <math.h>
 
 struct mesh {
     size_t n_vertices;
     size_t n_faces;
     struct vector* vertices;
     struct face* faces;
+    struct aabb aabb;
 };
 
 struct mesh* mesh_load(FILE* file) {
@@ -26,6 +28,12 @@ struct mesh* mesh_load(FILE* file) {
 
     mesh->n_vertices = n_vertices;
     mesh->n_faces = n_faces;
+    mesh->aabb.min.x = INFINITY;
+    mesh->aabb.min.y = INFINITY;
+    mesh->aabb.min.z = INFINITY;
+    mesh->aabb.max.x = -INFINITY;
+    mesh->aabb.max.y = -INFINITY;
+    mesh->aabb.max.z = -INFINITY;
 
     mesh->vertices = malloc(sizeof(*mesh->vertices) * n_vertices);
     if (!mesh->vertices) {
@@ -44,6 +52,22 @@ struct mesh* mesh_load(FILE* file) {
             exit(1);
         }
         mesh->vertices[i] = vertex;
+
+        if (vertex.x < mesh->aabb.min.x) {
+            mesh->aabb.min.x = vertex.x;
+        } else if (vertex.x > mesh->aabb.max.x) {
+            mesh->aabb.max.x = vertex.x;
+        }
+        if (vertex.y < mesh->aabb.min.y) {
+            mesh->aabb.min.y = vertex.y;
+        } else if (vertex.y > mesh->aabb.max.y) {
+            mesh->aabb.max.y = vertex.y;
+        }
+        if (vertex.z < mesh->aabb.min.z) {
+            mesh->aabb.min.z = vertex.z;
+        } else if (vertex.z > mesh->aabb.max.z) {
+            mesh->aabb.max.z = vertex.z;
+        }
     }
 
     for (size_t i = 0; i < n_faces; i++) {
@@ -77,4 +101,8 @@ struct vector mesh_get_vertex(const struct mesh* mesh, size_t i) {
 
 struct face mesh_get_face(const struct mesh* mesh, size_t i) {
     return mesh->faces[i];
+}
+
+const struct aabb* mesh_get_aabb(const struct mesh* mesh) {
+    return &mesh->aabb;
 }
