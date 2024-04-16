@@ -1,0 +1,8 @@
+# Copyright (C) 2024 Ethan Uppal. All rights reserved.
+
+*.DS_Store
+*.o
+*.d
+*.dSYM
+*~
+.clang-format
