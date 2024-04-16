@@ -3,6 +3,7 @@
  * @copyright Copyright (C) 2024 Ethan Uppal. All rights reserved.
  */
 
+#include <math.h>
 #include "vector.h"
 
 struct vector v_add(struct vector a, struct vector b) {
@@ -36,4 +37,8 @@ struct vector v_cross(struct vector a, struct vector b) {
     result.y = a.z * b.x - a.x * b.z;
     result.z = a.x * b.y - a.y * b.x;
     return result;
+}
+
+void v_normalize(struct vector* v) {
+    *v = v_scale(*v, 1.0 / sqrt(v_dot(*v, *v)));
 }

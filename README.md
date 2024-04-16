@@ -9,7 +9,7 @@ git clone https://github.com/ethanuppal/graphics-dev.git
 cd graphics-dev
 make test
 make
-./main
+./main test1
 ```
 
 ## Models

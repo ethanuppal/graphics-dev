@@ -15,11 +15,15 @@ struct mesh {
     struct aabb aabb;
 };
 
+static const char* mesh_load_error_string = "No error";
+
 struct mesh* mesh_load(FILE* file) {
     size_t n_vertices;
     size_t n_faces;
     if (fscanf(file, "%zu %zu\n", &n_vertices, &n_faces) < 2) {
-        exit(1);
+        mesh_load_error_string =
+            "Invalid header: expected <n_vertices> <n_faces>";
+        return NULL;
     }
     struct mesh* mesh = malloc(sizeof(*mesh));
     if (!mesh) {
@@ -49,7 +53,8 @@ struct mesh* mesh_load(FILE* file) {
         struct vector vertex;
         if (fscanf(file, "%lf %lf %lf\n", &vertex.x, &vertex.y, &vertex.z)
             < 3) {
-            exit(1);
+            mesh_load_error_string = "Invalid vertex: expected <x> <y> <z>";
+            return NULL;
         }
         mesh->vertices[i] = vertex;
 
@@ -73,12 +78,18 @@ struct mesh* mesh_load(FILE* file) {
     for (size_t i = 0; i < n_faces; i++) {
         struct face face;
         if (fscanf(file, "%zu %zu %zu\n", &face.v1, &face.v2, &face.v3) < 3) {
-            exit(1);
+            mesh_load_error_string = "Invalid face: expected <v1> <v2> <v3>";
+            return NULL;
         }
         mesh->faces[i] = face;
     }
 
+    mesh_load_error_string = "No error";
     return mesh;
+}
+
+const char* mesh_load_error(void) {
+    return mesh_load_error_string;
 }
 
 void mesh_destroy(struct mesh* mesh) {

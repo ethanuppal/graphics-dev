@@ -19,3 +19,4 @@ struct vector v_sub(struct vector a, struct vector b);
 struct vector v_scale(struct vector a, scalar_t c);
 scalar_t v_dot(struct vector a, struct vector b);
 struct vector v_cross(struct vector a, struct vector b);
+void v_normalize(struct vector* v);

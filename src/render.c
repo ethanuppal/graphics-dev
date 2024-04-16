@@ -7,23 +7,25 @@
 #include "intersect.h"
 
 void render(const struct frame* frame, const struct mesh* scene[],
-    size_t mesh_count, struct view_box vb) {
-    double vb_width = vb.max_x - vb.min_x;
-    double vb_height = vb.max_y - vb.min_y;
-    double x_scale = vb_width / (double)frame->width;
-    double y_scale = vb_height / (double)frame->height;
+    size_t mesh_count, struct camera camera) {
+    double x_scale = camera.vb_width / (double)frame->width;
+    double y_scale = camera.vb_height / (double)frame->height;
+
+    struct vector dir = camera.focus;
+    v_normalize(&dir);
+
+    struct vector w_hat = v_cross(camera.h_hat, dir);
+    v_normalize(&w_hat);  // no-op
 
     for (size_t j = 0; j < frame->height; j++) {
         for (size_t i = 0; i < frame->width; i++) {
-            struct vector src;
-            src.x = (double)i * x_scale + vb.min_x;
-            src.y = vb.max_y - (double)j * y_scale;
-            src.z = vb.z_focus;
+            struct vector src = v_add(v_scale(w_hat, (double)i * x_scale
+                                                         - camera.vb_width / 2),
+                v_scale(camera.h_hat,
+                    camera.vb_height / 2 - (double)j * y_scale));
+            src = v_add(src, camera.pos);
 
-            struct vector dir;
-            dir.x = 0;
-            dir.y = 0;
-            dir.z = 1;
+            // you'd update dir if this was perspective.
 
             frame->buffer[j * frame->width + i] = 0x0;
 
