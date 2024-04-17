@@ -2,7 +2,7 @@
 
 \section usage_sec Usage
 
-You can use the following series of commands to locally run this project, which depends on SDL2.
+You can use the following series of commands to locally run this project, which depends on SDL2 and `gettimeofday`.
 
 ```shell
 git clone https://github.com/ethanuppal/graphics-dev.git

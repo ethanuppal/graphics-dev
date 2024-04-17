@@ -1,6 +1,6 @@
 # graphics-dev
 
-This project depends on SDL2.
+This project depends on SDL2 and `gettimeofday`.
 
 ## Usage
 

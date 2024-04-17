@@ -10,13 +10,20 @@ CRELEASE	:= -O2
 TARGET		:= main
 
 # CFLAGS 		+= $(CRELEASE)
-CFLAGS 		+= $(CDEBUG) $(shell sdl2-config --cflags --libs)
+CFLAGS 		+= $(shell sdl2-config --cflags --libs)
 
 SRC			:= $(shell find $(SRCDIR) -name "*.c" -type f)
 OBJ			:= $(SRC:.c=.o)
 
-$(TARGET): main.c $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
+$(TARGET): build
+
+.PHONY: build
+build: main.c $(OBJ)
+	$(CC) $(CFLAGS) $(CDEBUG) -o $(TARGET) $^
+
+.PHONY: release
+release: main.c $(OBJ)
+	$(CC) $(CFLAGS) $(CRELEASE) -o $(TARGET) $^
 
 .PHONY: test
 test: test.c $(OBJ)

@@ -1,36 +1,48 @@
 // Copyright (C) 2024 Ethan Uppal. All rights reserved.
 
 #include <stdio.h>
+#include <math.h>
+#include <sys/time.h>
 #include "window.h"
 #include "render.h"
+#include "fps.h"
 
-struct scene {
+#define TARGET_FPS 60
+
+struct view {
     struct mesh** meshes;
     size_t mesh_count;
+    struct fps fps;
 };
 
 bool callback(const struct frame* frame, void* user_data) {
     static double radians = 0;
 
+    struct view* view = (struct view*)user_data;
+
+    const double time_dilate = ((double)TARGET_FPS / fps_current(&view->fps));
+
     struct camera c;
-    c.pos = (struct vector){0, 0, 0};
-    c.focus = (struct vector){0, 0, 1};
-    c.h_hat = (struct vector){0, 1, 0};
+    c.pos = (struct vector){2 * cos(radians), 0.5, 2 * sin(radians)};
+    c.focus = (struct vector){-2 * cos(radians), -0.5, -2 * sin(radians)};
     c.vb_width = 2;
     c.vb_height = 2;
+    v_normalize(&c.focus);
 
-    struct scene* scene = (struct scene*)user_data;
+    render(frame, view->meshes, view->mesh_count, &c);
 
-    render(frame, scene->meshes, scene->mesh_count, c);
+    radians += 0.01 * time_dilate;
 
-    radians += 0.01;
+    fps_hold(&view->fps);
+    fps_auto_adjust(&view->fps);
+
     return true;
 }
 
 int main(int argc, const char* argv[]) {
     if (argc != 2) {
         fprintf(stderr,
-            "usage: %s <name> where <name>.txt is a model in models/\n",
+            "usage: %s <name> where <name>.txt is a model in 'models/'\n",
             argv[0]);
         return 1;
     }
@@ -39,7 +51,7 @@ int main(int argc, const char* argv[]) {
     snprintf(buffer, sizeof(buffer), "models/%s.txt", argv[1]);
     FILE* f = fopen(buffer, "r");
     if (!f) {
-        fprintf(stderr, "error: file %s does not exist", buffer);
+        fprintf(stderr, "error: file %s does not exist\n", buffer);
         return 1;
     }
     struct mesh* mesh = mesh_load(f);
@@ -51,11 +63,12 @@ int main(int argc, const char* argv[]) {
 
     struct mesh* meshes[] = {mesh};
 
-    struct scene scene;
-    scene.meshes = meshes;
-    scene.mesh_count = sizeof(meshes) / sizeof(*meshes);
+    struct view view;
+    view.meshes = meshes;
+    view.mesh_count = sizeof(meshes) / sizeof(*meshes);
+    view.fps = fps_make(60);
 
-    window_display("Test", 400, 400, callback, &scene);
+    window_display("Test", 400, 400, callback, &view);
 
     return 0;
 }
