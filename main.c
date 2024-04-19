@@ -12,24 +12,35 @@
 
 struct view {
     struct scene scene;
+    struct camera camera;
+    scalar_t camera_angle;
     struct fps fps;
 };
 
-bool callback(const struct frame* frame, void* user_data) {
+void on_event(const SDL_Event* event, void* user_data) {
+    // only handle key events
+    if (event->type != SDL_KEYDOWN && event->type != SDL_KEYUP) {
+        return;
+    }
+
+    struct view* view = (struct view*)user_data;
+
+    // TODO:
+}
+
+bool draw(const struct frame* frame, void* user_data) {
     static double radians = 0;
 
     struct view* view = (struct view*)user_data;
 
     const double time_dilate = ((double)TARGET_FPS / fps_current(&view->fps));
 
-    struct camera c;
-    c.pos = (struct vector){2 * cos(radians), 0.5, 2 * sin(radians)};
-    c.focus = (struct vector){-2 * cos(radians), -0.5, -2 * sin(radians)};
-    c.vb_width = 2;
-    c.vb_height = 2;
-    v_normalize(&c.focus);
+    view->camera.pos = (struct vector){2 * cos(radians), 0.5, 2 * sin(radians)};
+    view->camera.focus = (struct vector){
+        -2 * cos(radians), -0.5, -2 * sin(radians)};
+    v_normalize(&view->camera.focus);
 
-    render(frame, &view->scene, &c);
+    render(frame, &view->scene, &view->camera);
 
     radians += 0.01 * time_dilate;
 
@@ -65,14 +76,22 @@ int main(int argc, const char* argv[]) {
 
     struct light lights[] = {};
 
+    struct camera camera;
+    camera.pos = (struct vector){2, 0.5, 0};
+    camera.focus = (struct vector){-2, -0.5, 0};
+    camera.vb_width = 2;
+    camera.vb_height = 2;
+    v_normalize(&camera.focus);
+
     struct view view;
     view.scene.meshes = meshes;
     view.scene.mesh_count = lengthof(meshes);
     view.scene.lights = lights;
     view.scene.light_count = lengthof(lights);
+    view.camera = camera;
     view.fps = fps_make(60);
 
-    window_display("Test", 400, 400, callback, &view);
+    window_display("Test", 400, 400, on_event, draw, &view);
 
     return 0;
 }

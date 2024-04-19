@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include <SDL_events.h>  // SDL_Event
 
 /** A frame for drawing. */
 struct frame {
@@ -18,7 +19,9 @@ struct frame {
 };
 
 /** Displays a window with title `title`, width `width`, height `height`, and
- * continuously calls `callback`, blocking until the callback returns `false`.
+ * continuously calls `draw`, blocking until this callback returns `false`.
+ * The `on_event` callback is invoked whenever there is an event.
  */
 void window_display(const char* title, size_t width, size_t height,
-    bool callback(const struct frame*, void*), void* user_data);
+    void on_event(const SDL_Event*, void*),
+    bool draw(const struct frame*, void*), void* user_data);
