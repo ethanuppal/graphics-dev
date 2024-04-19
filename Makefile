@@ -15,7 +15,9 @@ CFLAGS 		+= $(shell sdl2-config --cflags --libs)
 SRC			:= $(shell find $(SRCDIR) -name "*.c" -type f)
 OBJ			:= $(SRC:.c=.o)
 
-$(TARGET): build
+.PHONY: $(TARGET)
+$(TARGET): 
+	make build
 
 .PHONY: build
 build: main.c $(OBJ)
@@ -38,7 +40,7 @@ test: test.c $(OBJ)
 
 .PHONY: clean
 clean:
-	rm -rf $(OBJ) docs
+	rm -rf $(TARGET) $(OBJ) docs
 
 .PHONY: docs
 docs:

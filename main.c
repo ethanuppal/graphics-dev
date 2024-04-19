@@ -8,10 +8,10 @@
 #include "fps.h"
 
 #define TARGET_FPS 60
+#define lengthof(a) (sizeof(a) / sizeof(*(a)))
 
 struct view {
-    struct mesh** meshes;
-    size_t mesh_count;
+    struct scene scene;
     struct fps fps;
 };
 
@@ -29,7 +29,7 @@ bool callback(const struct frame* frame, void* user_data) {
     c.vb_height = 2;
     v_normalize(&c.focus);
 
-    render(frame, view->meshes, view->mesh_count, &c);
+    render(frame, &view->scene, &c);
 
     radians += 0.01 * time_dilate;
 
@@ -63,9 +63,13 @@ int main(int argc, const char* argv[]) {
 
     struct mesh* meshes[] = {mesh};
 
+    struct light lights[] = {};
+
     struct view view;
-    view.meshes = meshes;
-    view.mesh_count = sizeof(meshes) / sizeof(*meshes);
+    view.scene.meshes = meshes;
+    view.scene.mesh_count = lengthof(meshes);
+    view.scene.lights = lights;
+    view.scene.light_count = lengthof(lights);
     view.fps = fps_make(60);
 
     window_display("Test", 400, 400, callback, &view);

@@ -77,8 +77,11 @@ struct mesh* mesh_load(FILE* file) {
 
     for (size_t i = 0; i < n_faces; i++) {
         struct face face;
-        if (fscanf(file, "%zu %zu %zu\n", &face.v1, &face.v2, &face.v3) < 3) {
-            mesh_load_error_string = "Invalid face: expected <v1> <v2> <v3>";
+        if (fscanf(file, "%zu %zu %zu %x\n", &face.v1, &face.v2, &face.v3,
+                &face.color)
+            < 3) {
+            mesh_load_error_string =
+                "Invalid face: expected <v1> <v2> <v3> <col>";
             return NULL;
         }
         mesh->faces[i] = face;

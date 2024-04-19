@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include "window.h"
 #include "mesh.h"
+#include "light.h"
 
 struct camera {
     struct vector pos;    ///< The location of the camera.
@@ -24,13 +25,19 @@ struct ray_intersection {
     size_t face_i;
 };
 
+struct scene {
+    const struct mesh** meshes;
+    size_t mesh_count;
+    const struct light* lights;
+    size_t light_count;
+};
+
 /** Returns `true` if there is a ray intersection and initializes `intersect`
  * with the information of the closest intersection. Otherwise, simply returns
  * `false`. */
 bool raycast(const struct mesh* scene[], size_t mesh_count, struct vector src,
     struct vector dir, struct ray_intersection* intersect);
 
-/** Renders the `mesh_count` objects in `scene` to `frame`, viewing through
- * `camera`. */
-void render(const struct frame* frame, const struct mesh* scene[],
-    size_t mesh_count, const struct camera* camera);
+/** Renders `scene` to `frame` as viewed through `camera`. */
+void render(const struct frame* frame, const struct scene* scene,
+    const struct camera* camera);

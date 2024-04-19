@@ -6,6 +6,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdint.h>
 #include "vector.h"
 
 /** The indices of the vertices in a mesh that form a triangular face. */
@@ -13,6 +14,7 @@ struct face {
     size_t v1;
     size_t v2;
     size_t v3;
+    uint32_t color;  ///< temp
 };
 
 /** A bounding box. */

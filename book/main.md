@@ -22,6 +22,8 @@ The first line is of the form `"%%zu %%zu\n"`, corresponding to the number of ve
 The next `n` lines consist of entries of the form `%%fl %%lf %%lf\n`, which are the coordinates of a vertex in the standard basis.
 Vertices are indexed starting from zero in the order in which they appear in this list.
 
-The next `m` lines consist of entires of the form `%%zu %%zu %%%zu\n`, which are the indices of vertices in the faces of the mesh.
+The next `m` lines consist of entires of the form `%%zu %%zu %%zu %%x\n`, which are the indices of vertices in the faces of the mesh and the color of the face.
 Meshes are indexed identically to vertices.
 The order of vertices must be clockwise for proper normal vector orientation.
+Let the vertices in order be `a`, `b`, and `c`.
+Then, the normal vector is `norm(cross(b - a, c - a))`.

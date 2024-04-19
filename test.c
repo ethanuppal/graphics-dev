@@ -70,6 +70,7 @@ void test_load_mesh(void) {
     assert_equal(0, face.v1);
     assert_equal(1, face.v2);
     assert_equal(2, face.v3);
+    assert_equal(0xFF0000, face.color);
 
     const struct aabb* aabb = mesh_get_aabb(mesh);
     assert_equal(0, aabb->min.x);
