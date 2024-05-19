@@ -42,7 +42,7 @@ bool draw(const struct frame* frame, void* user_data) {
 
     render(frame, &view->scene, &view->camera);
 
-    radians += 0.01 * time_dilate;
+    radians += 0.02 * time_dilate;
 
     fps_hold(&view->fps);
     fps_auto_adjust(&view->fps);
