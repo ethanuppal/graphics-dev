@@ -74,7 +74,7 @@ int main(int argc, const char* argv[]) {
 
     struct mesh* meshes[] = {mesh};
 
-    struct light lights[] = {};
+    struct light lights[] = {{.pos = (struct vector){0, 0, 0}, .intensity = 1}};
 
     struct camera camera;
     camera.pos = (struct vector){2, 0.5, 0};

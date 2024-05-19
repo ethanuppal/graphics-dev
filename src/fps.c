@@ -4,6 +4,7 @@
  */
 
 #include <sys/time.h>
+#include <stddef.h>
 #include "fps.h"
 
 static double get_time(void) {

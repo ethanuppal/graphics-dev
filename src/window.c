@@ -3,9 +3,10 @@
  * @copyright Copyright (C) 2024 Ethan Uppal. All rights reserved.
  */
 
-#include "window.h"
 #include <stdlib.h>
+#include <stddef.h>
 #include <SDL.h>
+#include "window.h"
 
 void window_display(const char* title, size_t width, size_t height,
     void on_event(const SDL_Event*, void*),

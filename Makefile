@@ -10,7 +10,8 @@ CRELEASE	:= -O2
 TARGET		:= main
 
 # CFLAGS 		+= $(CRELEASE)
-CFLAGS 		+= $(shell sdl2-config --cflags --libs)
+CFLAGS 		+= $(shell sdl2-config --cflags)
+LDFLAGS     := $(shell sdl2-config --libs) -lm
 
 SRC			:= $(shell find $(SRCDIR) -name "*.c" -type f)
 OBJ			:= $(SRC:.c=.o)
@@ -21,15 +22,15 @@ $(TARGET):
 
 .PHONY: build
 build: main.c $(OBJ)
-	$(CC) $(CFLAGS) $(CDEBUG) -o $(TARGET) $^
+	$(CC) $(CFLAGS) $(CDEBUG) -o $(TARGET) $^ $(LDFLAGS)
 
 .PHONY: release
 release: main.c $(OBJ)
-	$(CC) $(CFLAGS) $(CRELEASE) -o $(TARGET) $^
+	$(CC) $(CFLAGS) $(CRELEASE) -o $(TARGET) $^ $(LDFLAGS)
 
 .PHONY: test
 test: test.c $(OBJ)
-	@$(CC) $(CFLAGS) -DTEST -o _temp $^
+	@$(CC) $(CFLAGS) -DTEST -o _temp $^ $(LDFLAGS)
 	@echo 'Running tests...'
 	@./_temp
 	@rm -f ./_temp

@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stddef.h>
 #include "vector.h"
 
 /** The indices of the vertices in a mesh that form a triangular face. */
